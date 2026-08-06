@@ -81,21 +81,44 @@ Checkout
 function checkout() {
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
-<cXML payloadID="dax01" timestamp="2026-08-06T10:00:00Z">
-  <!-- Header elements identifying supplier and buyer -->
+<!DOCTYPE cXML SYSTEM "http://cxml.org">
+<cXML payloadID="cart_response_55521@vendor.com" timestamp="2026-08-06T12:15:00+07:00">
+  <Header>
+    <!-- From & To posisinya dibalik dibanding dokumen Request -->
+    <From>
+      <Credential domain="DUNS">
+        VENDOR_MAIN_ID
+      </Credential>
+    </From>
+    <To>
+      <Credential domain="NetworkID">
+        D365_BUYER_CORP
+      </Credential>
+    </To>
+    <Sender>
+      <Credential domain="DUNS">
+        VENDOR_MAIN_ID
+      </Credential>
+    </Sender>
+  </Header>
   <Message>
     <PunchOutOrderMessage operation="create">
-      <BuyerCookie>data1234</BuyerCookie>
-      <PunchOutOrderMessageHeader>
-        <Total><Money currency="USD">274.00</Money></Total>
+      <!-- VALIDASI UTAMA: Wajib sama persis dengan BuyerCookie di atas -->
+      <BuyerCookie>SESSION_TOKEN_XYZ_98765</BuyerCookie>
+      <PunchOutOrderMessageHeader operationAllowed="create">
+        <Total><Money currency="IDR">2500000.00</Money></Total>
       </PunchOutOrderMessageHeader>
-      <!-- ItemIn defines the line items added to the cart -->
-      <ItemIn quantity="1">
-        <ItemID><SupplierPartID>ITEM-A100</SupplierPartID></ItemID>
+      <!-- Rincian Produk Keranjang Belanja -->
+      <ItemIn quantity="1" lineNum="1">
+        <ItemID>
+          <SupplierPartID>COMP-00912</SupplierPartID>
+        </ItemID>
         <ItemDetail>
-          <UnitPrice><Money currency="USD">250.00</Money></UnitPrice>
-          <Description>Item Description</Description>
+          <UnitPrice><Money currency="IDR">2500000.00</Money></UnitPrice>
+          <Description xml:lang="id">Monitor LED 24 Inch Pro</Description>
+          <UnitOfMeasure>PCS</UnitOfMeasure>
+          <!-- Pastikan kode UNSPSC ini sudah dipetakan di D365 -->
+          <Classification domain="UNSPSC">43211902</Classification>
         </ItemDetail>
       </ItemIn>
     </PunchOutOrderMessage>
