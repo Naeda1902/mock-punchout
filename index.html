@@ -81,71 +81,25 @@ Checkout
 function checkout() {
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<cXML payloadID="TEST123"
-       timestamp="2026-08-06T10:00:00Z"
-       version="1.2.040"
-       xml:lang="en-US">
-
-<Message>
-
-<PunchOutOrderMessage>
-
-<BuyerCookie>data1234</BuyerCookie>
-
-<PunchOutOrderMessageHeader operationAllowed="create">
-<Total>
-<Money currency="USD">2500.00</Money>
-</Total>
-</PunchOutOrderMessageHeader>
-
-<ItemIn quantity="2">
-
-<ItemID>
-<SupplierPartID>LAPTOP001</SupplierPartID>
-</ItemID>
-
-<ItemDetail>
-
-<UnitPrice>
-<Money currency="USD">1200.00</Money>
-</UnitPrice>
-
-<Description xml:lang="en-US">
-Dell Latitude 5450
-</Description>
-
-<UnitOfMeasure>EA</UnitOfMeasure>
-
-</ItemDetail>
-
-</ItemIn>
-
-<ItemIn quantity="5">
-
-<ItemID>
-<SupplierPartID>MOUSE001</SupplierPartID>
-</ItemID>
-
-<ItemDetail>
-
-<UnitPrice>
-<Money currency="USD">20.00</Money>
-</UnitPrice>
-
-<Description xml:lang="en-US">
-Wireless Mouse
-</Description>
-
-<UnitOfMeasure>EA</UnitOfMeasure>
-
-</ItemDetail>
-
-</ItemIn>
-
-</PunchOutOrderMessage>
-
-</Message>
-
+<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
+<cXML payloadID="dax01" timestamp="2026-08-06T10:00:00Z">
+  <!-- Header elements identifying supplier and buyer -->
+  <Message>
+    <PunchOutOrderMessage operation="create">
+      <BuyerCookie>data1234</BuyerCookie>
+      <PunchOutOrderMessageHeader>
+        <Total><Money currency="USD">274.00</Money></Total>
+      </PunchOutOrderMessageHeader>
+      <!-- ItemIn defines the line items added to the cart -->
+      <ItemIn quantity="1">
+        <ItemID><SupplierPartID>ITEM-A100</SupplierPartID></ItemID>
+        <ItemDetail>
+          <UnitPrice><Money currency="USD">250.00</Money></UnitPrice>
+          <Description>Item Description</Description>
+        </ItemDetail>
+      </ItemIn>
+    </PunchOutOrderMessage>
+  </Message>
 </cXML>`;
 
 document.getElementById("cxml").value = xml;
