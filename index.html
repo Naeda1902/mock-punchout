@@ -84,7 +84,6 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE cXML SYSTEM "http://cxml.org">
 <cXML payloadID="cart_response_55521@vendor.com" timestamp="2026-08-06T12:15:00+07:00">
   <Header>
-    <!-- From & To posisinya dibalik dibanding dokumen Request -->
     <From>
       <Credential domain="DUNS">
         VENDOR_MAIN_ID
@@ -103,12 +102,11 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   </Header>
   <Message>
     <PunchOutOrderMessage operation="create">
-      <!-- VALIDASI UTAMA: Wajib sama persis dengan BuyerCookie di atas -->
+      <!-- PASTIKAN NILAI INI SESUAI DENGAN BUYER COOKIE DARI REQUEST TERBARU -->
       <BuyerCookie>SESSION_TOKEN_XYZ_98765</BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="create">
         <Total><Money currency="IDR">2500000.00</Money></Total>
       </PunchOutOrderMessageHeader>
-      <!-- Rincian Produk Keranjang Belanja -->
       <ItemIn quantity="1" lineNum="1">
         <ItemID>
           <SupplierPartID>2506000000971</SupplierPartID>
@@ -117,16 +115,18 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
           <UnitPrice><Money currency="IDR">2500000.00</Money></UnitPrice>
           <Description xml:lang="id">BUTTON/KANCING RIBBON RED CNY 26 YESNICE 003</Description>
           <UnitOfMeasure>PCS</UnitOfMeasure>
-          <!-- Pastikan kode UNSPSC ini sudah dipetakan di D365 -->
-          <Classification domain="Project">Project</Classification>
+          <!-- Menggunakan domain UNSPSC agar terbaca oleh Category Mapping D365 -->
+          <Classification domain="UNSPSC">Project</Classification>
         </ItemDetail>
       </ItemIn>
     </PunchOutOrderMessage>
   </Message>
 </cXML>`;
 
-document.getElementById("cxml").value = xml;
+// WAJIB DI-ENCODE AGAR KARAKTER SEPERTI < DAN > TIDAK RUSAK DI JALUR HTTP POST
+document.getElementById("cxml").value = encodeURIComponent(xml);
 
+// Kirim form ke ReturnPoint D365
 document.getElementById("checkoutForm").submit();
 
 }
