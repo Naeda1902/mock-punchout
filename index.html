@@ -50,7 +50,7 @@ button {
 
 <!-- PERBAIKAN: Action form dialihkan langsung ke endpoint ReturnPoint API, bukan halaman wizard UI -->
 <form id="checkoutForm"
-      action="https://uat-mp.sandbox.operations.dynamics.com/?mi=CatExternalCatalogBasketWizard"
+      action="https://uat-mp.sandbox.operations.dynamics.com/punchout/cxml/%7B08333A97-C7AD-8EE4-2CC8-E705678D5A50%7D"
       method="POST">
     <input type="hidden" name="cXML-urlencoded" id="cxml"/>
 </form>
@@ -83,7 +83,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <Message>
     <PunchOutOrderMessage operation="create">
       <!-- WAJIB: Pastikan token ini disamakan secara dinamis saat testing ulang dari D365 -->
-      <BuyerCookie>{5EB4FC21-8535-87E4-CC6E-04C541914FDA}</BuyerCookie>
+      <BuyerCookie>{8106AB78-B81F-11E5-1B94-661C22B4FFAF}</BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="create">
         <Total><Money currency="IDR">2500000.00</Money></Total>
       </PunchOutOrderMessageHeader>
