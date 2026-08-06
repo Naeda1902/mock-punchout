@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock PunchOut Vendor</title>
+
+<style>
+body {
+    font-family: Arial;
+    width: 900px;
+    margin: 40px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Mock PunchOut Vendor Catalog</h2>
+
+<p>Pilih item lalu klik Checkout.</p>
+
+<table>
+<tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Price</th>
+</tr>
+
+<tr>
+    <td>Dell Latitude 5450</td>
+    <td>2</td>
+    <td>1200 USD</td>
+</tr>
+
+<tr>
+    <td>Wireless Mouse</td>
+    <td>5</td>
+    <td>20 USD</td>
+</tr>
+
+</table>
+
+<form id="checkoutForm"
+      action="https://uat-mp.sandbox.operations.dynamics.com/?mi=CatExternalCatalogBasketWizard"
+      method="POST">
+
+    <input
+        type="hidden"
+        name="cXML-urlencoded"
+        id="cxml"/>
+
+</form>
+
+<button onclick="checkout()">
+Checkout
+</button>
+
+<script>
+
+function checkout() {
+
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<cXML payloadID="TEST123"
+       timestamp="2026-08-06T10:00:00Z"
+       version="1.2.040"
+       xml:lang="en-US">
+
+<Message>
+
+<PunchOutOrderMessage>
+
+<BuyerCookie>ABC123</BuyerCookie>
+
+<PunchOutOrderMessageHeader operationAllowed="create">
+<Total>
+<Money currency="USD">2500.00</Money>
+</Total>
+</PunchOutOrderMessageHeader>
+
+<ItemIn quantity="2">
+
+<ItemID>
+<SupplierPartID>LAPTOP001</SupplierPartID>
+</ItemID>
+
+<ItemDetail>
+
+<UnitPrice>
+<Money currency="USD">1200.00</Money>
+</UnitPrice>
+
+<Description xml:lang="en-US">
+Dell Latitude 5450
+</Description>
+
+<UnitOfMeasure>EA</UnitOfMeasure>
+
+</ItemDetail>
+
+</ItemIn>
+
+<ItemIn quantity="5">
+
+<ItemID>
+<SupplierPartID>MOUSE001</SupplierPartID>
+</ItemID>
+
+<ItemDetail>
+
+<UnitPrice>
+<Money currency="USD">20.00</Money>
+</UnitPrice>
+
+<Description xml:lang="en-US">
+Wireless Mouse
+</Description>
+
+<UnitOfMeasure>EA</UnitOfMeasure>
+
+</ItemDetail>
+
+</ItemIn>
+
+</PunchOutOrderMessage>
+
+</Message>
+
+</cXML>`;
+
+document.getElementById("cxml").value = xml;
+
+document.getElementById("checkoutForm").submit();
+
+}
+
+</script>
+
+</body>
+</html>
