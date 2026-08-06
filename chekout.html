@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock PunchOut Vendor</title>
+
+<style>
+body{
+    font-family:Arial;
+    width:900px;
+    margin:40px auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:10px;
+}
+
+th{
+    background:#efefef;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 30px;
+    font-size:18px;
+    cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Mock Vendor Catalog</h2>
+
+<table>
+
+<tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Price</th>
+</tr>
+
+<tr>
+    <td>Dell Latitude 5450</td>
+    <td>2</td>
+    <td>1200 USD</td>
+</tr>
+
+<tr>
+    <td>Wireless Mouse</td>
+    <td>5</td>
+    <td>20 USD</td>
+</tr>
+
+</table>
+
+<form id="punchoutForm"
+      action="https://uat-mp.sandbox.operations.dynamics.com/?mi=CatExternalCatalogBasketWizard"
+      method="POST"
+      enctype="application/x-www-form-urlencoded">
+
+<input
+type="hidden"
+name="cXML-urlencoded"
+id="cxml">
+
+</form>
+
+<button onclick="checkout()">
+Checkout
+</button>
+
+<script>
+
+function checkout()
+{
+
+let xml =
+`<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.040/cXML.dtd">
+
+<cXML
+payloadID="TEST123456"
+timestamp="2026-08-06T10:00:00Z"
+version="1.2.040"
+xml:lang="en-US">
+
+<Header>
+
+<From>
+<Credential domain="NetworkID">
+<Identity>MockVendor</Identity>
+</Credential>
+</From>
+
+<To>
+<Credential domain="NetworkID">
+<Identity>D365FO</Identity>
+</Credential>
+</To>
+
+<Sender>
+<Credential domain="NetworkID">
+<Identity>MockVendor</Identity>
+<SharedSecret>secret</SharedSecret>
+</Credential>
+
+<UserAgent>
+Mock PunchOut
+</UserAgent>
+
+</Sender>
+
+</Header>
+
+<Message>
+
+<PunchOutOrderMessage>
+
+<BuyerCookie>ABC123</BuyerCookie>
+
+<PunchOutOrderMessageHeader operationAllowed="create">
+
+<Total>
+
+<Money currency="USD">
+2500.00
+</Money>
+
+</Total>
+
+</PunchOutOrderMessageHeader>
+
+<ItemIn quantity="2">
+
+<ItemID>
+
+<SupplierPartID>
+LAPTOP001
+</SupplierPartID>
+
+<SupplierPartAuxiliaryID>
+LAPTOP001
+</SupplierPartAuxiliaryID>
+
+</ItemID>
+
+<ItemDetail>
+
+<UnitPrice>
+
+<Money currency="USD">
+1200.00
+</Money>
+
+</UnitPrice>
+
+<Description
+xml:lang="en-US"
+ShortName="Dell Latitude 5450">
+
+Dell Latitude 5450
+
+</Description>
+
+<UnitOfMeasure>
+EA
+</UnitOfMeasure>
+
+<Classification domain="UNSPSC">
+43211503
+</Classification>
+
+<ManufacturerPartID>
+5450
+</ManufacturerPartID>
+
+<ManufacturerName>
+Dell
+</ManufacturerName>
+
+</ItemDetail>
+
+</ItemIn>
+
+<ItemIn quantity="5">
+
+<ItemID>
+
+<SupplierPartID>
+MOUSE001
+</SupplierPartID>
+
+<SupplierPartAuxiliaryID>
+MOUSE001
+</SupplierPartAuxiliaryID>
+
+</ItemID>
+
+<ItemDetail>
+
+<UnitPrice>
+
+<Money currency="USD">
+20.00
+</Money>
+
+</UnitPrice>
+
+<Description
+xml:lang="en-US"
+ShortName="Wireless Mouse">
+
+Wireless Mouse
+
+</Description>
+
+<UnitOfMeasure>
+EA
+</UnitOfMeasure>
+
+<Classification domain="UNSPSC">
+43211708
+</Classification>
+
+<ManufacturerPartID>
+M185
+</ManufacturerPartID>
+
+<ManufacturerName>
+Logitech
+</ManufacturerName>
+
+</ItemDetail>
+
+</ItemIn>
+
+</PunchOutOrderMessage>
+
+</Message>
+
+</cXML>`;
+
+document.getElementById("cxml").value = xml;
+
+document.getElementById("punchoutForm").submit();
+
+}
+
+</script>
+
+</body>
+</html>
