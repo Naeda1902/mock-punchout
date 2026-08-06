@@ -10,21 +10,17 @@ body {
     width: 900px;
     margin: 40px auto;
 }
-
 table {
     width: 100%;
     border-collapse: collapse;
 }
-
 th, td {
     border: 1px solid #ccc;
     padding: 10px;
 }
-
 th {
     background: #f2f2f2;
 }
-
 button {
     margin-top: 20px;
     padding: 10px 20px;
@@ -37,7 +33,6 @@ button {
 <body>
 
 <h2>Mock PunchOut Vendor Catalog</h2>
-
 <p>Pilih item lalu klik Checkout.</p>
 
 <table>
@@ -46,40 +41,24 @@ button {
     <th>Qty</th>
     <th>Price</th>
 </tr>
-
 <tr>
-    <td>Dell Latitude 5450</td>
-    <td>2</td>
-    <td>1200 USD</td>
+    <td>BUTTON/KANCING RIBBON RED CNY 26 YESNICE 003</td>
+    <td>1</td>
+    <td>2500000 IDR</td>
 </tr>
-
-<tr>
-    <td>Wireless Mouse</td>
-    <td>5</td>
-    <td>20 USD</td>
-</tr>
-
 </table>
 
+<!-- PERBAIKAN: Action form dialihkan langsung ke endpoint ReturnPoint API, bukan halaman wizard UI -->
 <form id="checkoutForm"
-      action="https://uat-mp.sandbox.operations.dynamics.com/?mi=CatExternalCatalogBasketWizard"
+      action="https://dynamics.com"
       method="POST">
-
-    <input
-        type="hidden"
-        name="cXML-urlencoded"
-        id="cxml"/>
-
+    <input type="hidden" name="cXML-urlencoded" id="cxml"/>
 </form>
 
-<button onclick="checkout()">
-Checkout
-</button>
+<button onclick="checkout()">Checkout</button>
 
 <script>
-
 function checkout() {
-
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE cXML SYSTEM "http://cxml.org">
 <cXML payloadID="cart_response_55521@vendor.com" timestamp="2026-08-06T12:15:00+07:00">
@@ -103,7 +82,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   </Header>
   <Message>
     <PunchOutOrderMessage operation="create">
-      <!-- PASTIKAN NILAI INI SESUAI DENGAN BUYER COOKIE DARI REQUEST TERBARU -->
+      <!-- WAJIB: Pastikan token ini disamakan secara dinamis saat testing ulang dari D365 -->
       <BuyerCookie>SESSION_TOKEN_XYZ_98765</BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="create">
         <Total><Money currency="IDR">2500000.00</Money></Total>
@@ -116,7 +95,6 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
           <UnitPrice><Money currency="IDR">2500000.00</Money></UnitPrice>
           <Description xml:lang="id">BUTTON/KANCING RIBBON RED CNY 26 YESNICE 003</Description>
           <UnitOfMeasure>PCS</UnitOfMeasure>
-          <!-- Menggunakan domain UNSPSC agar terbaca oleh Category Mapping D365 -->
           <Classification domain="UNSPSC">Project</Classification>
         </ItemDetail>
       </ItemIn>
@@ -124,14 +102,12 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   </Message>
 </cXML>`;
 
-// WAJIB DI-ENCODE AGAR KARAKTER SEPERTI < DAN > TIDAK RUSAK DI JALUR HTTP POST
+// Melakukan URL-encoding murni agar karakter khusus aman
 document.getElementById("cxml").value = encodeURIComponent(xml);
 
-// Kirim form ke ReturnPoint D365
+// Kirim data murni via browser ke D365
 document.getElementById("checkoutForm").submit();
-
 }
-
 </script>
 
 </body>
